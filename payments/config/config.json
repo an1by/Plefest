@@ -1,0 +1,427 @@
+{
+    "yoomoney_token": "4100118142469010.7E1A036F9CBBE8E12C2C0D4008EB394EECCCDD87672B977648479D4BBF5B6CA51FACEF9F78C8B28522355AB4E549133FA205548363332FE42AFF37348802525F958ABCE6C7B4392A125EAC164AD88F1CE01C72FE441208D159285E0E31F8DC8734A7C7EA0B318740317CCD139E4A81695D1137659FA91935118795EFCAF297D3",
+    "database": {
+        "host": "217.151.231.7",
+        "database": "plefest_test",
+        "user": "pixiemay",
+        "password": "_@zmwC&SvD3c8SW0mJ+de@vp",
+        "port": 3306
+    },
+    "guild": 1132152875099893820,
+    "worker_channel": 1179800354620178512,
+    "admin_channel": 1155891792529604660,
+    "permissions": {
+        "worker": 1180524217498873917,
+        "admin": 1134801770049179648
+    },
+    "other_messages": {
+        "balance_change": {
+            "content": "Установлен новый баланс для пользователя <@%account_discord%>!",
+            "embeds": [
+                {
+                    "description": "%change_reason%",
+                    "color": 11665663,
+                    "fields": [
+                        {
+                            "name": "`Старое значение:`",
+                            "value": "> %change_balance_before%"
+                        },
+                        {
+                            "name": "`Новое значение:`",
+                            "value": "> %account_balance%"
+                        }
+                    ]
+                }
+            ]
+        },
+        "no_permission": {
+            "content": "**Нет прав!**"
+        },
+        "error_ticket_interaction": {
+            "content": "Ошибка при взаимодействии с тикетом!\nОбратитесь к администрации."
+        },
+        "invalid_user": {
+            "content": "Некорректный пользователь!"
+        },
+        "no_money_admin": {
+            "content": "Недостаточно средств на счету администратора!"
+        },
+        "no_money": {
+            "content": "Недостаточно средств!"
+        },
+        "withdraw_minus": {
+            "content": "Недопустимый баланс для вывода средств!"
+        },
+        "invalid_argument": {
+            "content": "Дан неверный аргумент!"
+        },
+        "payment_not_found": {
+            "content": "Обрабатываемый платеж не найден!"
+        }
+    },
+    "commands": {
+        "reload": {
+            "success": {
+                "content": "Бот перезагружен!"
+            },
+            "error": {
+                "content": "Произошла ошибка при перезагрузке бота!\nПопробуйте еще раз или пофурычьте с панелью"
+            }
+        },
+        "pay": {
+            "success": {
+                "content": "Вы успешно перевели %pay_amount% рублей <@%target_discord%>!"
+            },
+            "error": {
+                "content": "Введите корректную сумму перевода!"
+            }
+        },
+        "account": {
+            "withdraw": {
+                "permission": "worker",
+                "messages": {
+                    "success": {
+                        "content": "Вы успешно вывели %withdraw_amount% на свой счет YooMoney!"
+                    },
+                    "admin": {
+                        "content": "<@%account_discord%> вывел на счет `%withdraw_requisites%` `%withdraw_amount% ₽`"
+                    }
+                }
+            },
+            "topup": {
+                "modal": {
+                    "title": "Купить монеты",
+                    "input": {
+                        "label": "Купить монеты",
+                        "placeholder": "100"
+                    }
+                },
+                "created": {
+                    "content": "Ваша ссылка для пополнения баланса создана!\n**Внимание!** Ваш банк может брать комиссию, из-за чего полная сумма может не прийти!",
+                    "url_button": {
+                        "label": "Перейти"
+                    },
+                    "check_button": {
+                        "label": "Проверить оплату",
+                        "style": "success"
+                    }
+                },
+                "success": {
+                    "content": "Платеж успешен!",
+                    "embeds": [
+                        {
+                            "color": 11665663,
+                            "fields": [
+                                {
+                                    "name": "`Отправлено:`",
+                                    "value": "> %topup_amount%",
+                                    "inline": true
+                                },
+                                {
+                                    "name": "`Дошло:`",
+                                    "value": "> %topup_real_amount%",
+                                    "inline": true
+                                },
+                                {
+                                    "name": "`Новый баланс:`",
+                                    "value": "> %account_balance%",
+                                    "inline": false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "wait": {
+                    "content": "Оплата еще не прошла!"
+                }
+            },
+            "info": {
+                "permission_other": "worker",
+                "content": "Информация о <@%account_discord%>",
+                "embeds": [
+                    {
+                        "color": 11665663,
+                        "fields": [
+                            {
+                                "name": "`Тип пользователя:`",
+                                "value": "> %account_permission_name%",
+                                "inline": true
+                            },
+                            {
+                                "name": "`Баланс:`",
+                                "value": "> %account_balance%",
+                                "inline": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            "balance": {
+                "embeds": [
+                    {
+                        "title": "**Баланс для <@%account_discord%> изменен!**",
+                        "color": 11665663,
+                        "fields": [
+                            {
+                                "name": "`Новое значение:`",
+                                "value": "> %account_balance%"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "help": {
+                "content": "> Подсказка по `/account`",
+                "embeds": [
+                    {
+                        "title": "Команды",
+                        "color": 11665663,
+                        "fields": [
+                            {
+                                "name": "`/account` или `/account help`",
+                                "value": "Высвечивает эту подсказку",
+                                "inline": false
+                            },
+                            {
+                                "name": "`/account info`",
+                                "value": "Информация о себе",
+                                "inline": false
+                            },
+                            {
+                                "permission": "admin",
+                                "name": "`/account info <USER>`",
+                                "value": "Информация о человеке",
+                                "inline": true
+                            },
+                            {
+                                "permission": "worker",
+                                "name": "`/account withdraw <ID>`",
+                                "value": "Обналичить счет",
+                                "inline": false
+                            },
+                            {
+                                "permission": "admin",
+                                "name": "`/account balance <USER> <BALANCE>`",
+                                "value": "Устанавливает баланс человеку",
+                                "inline": true
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "surchange": {
+        "modal": {
+            "title": "Доплата",
+            "component": {
+                "label": "Сумма для доплаты",
+                "placeholder": "100"
+            }
+        },
+        "success": {
+            "content": "<@%account_discord%> совершил доплату к тикету!",
+            "embeds": [
+                {
+                    "title": "Доплата",
+                    "color": 11665663,
+                    "fields": [
+                        {
+                            "name": "Сумма",
+                            "value": "`%surchange_amount% ₽`",
+                            "inline": true
+                        },
+                        {
+                            "name": "Новый баланс",
+                            "value": "`%ticket_balance% ₽`",
+                            "inline": true
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "tickets": {
+        "category": 1179800321619394720,
+        "messages": {
+            "unavailable": {
+                "content": "**Тикет недоступен!**"
+            },
+            "taken": {
+                "original": {
+                    "content": "Заказ `%ticket_number%` забрал <@%account_discord%>!"
+                },
+                "in_chat": {
+                    "content": "<@%ticket_buyer%>, ваш заказ был принят работником <@%account_discord%>!"
+                }
+            },
+            "created": {
+                "content": "Заказ успешно создан! Перейдите в <#%ticket_channel%>"
+            },
+            "main": {
+                "content": "Заказ `%ticket_title%`\nБаланс тикета: %ticket_balance%"
+            },
+            "completed": {
+                "content": "Заказ `%ticket_title%` от <@%ticket_buyer%> был выполнен работником %ticket_worker_mention%"
+            },
+            "worker": {
+                "content": "Пришел новый заказ от <@%account_discord%>!",
+                "embeds": [
+                    {
+                        "color": 11665663,
+                        "fields": [
+                            {
+                                "name": "Товар",
+                                "value": "`%good_name% ₽`",
+                                "inline": true
+                            },
+                            {
+                                "name": "Сумма заказа",
+                                "value": "`%ticket_balance% ₽`",
+                                "inline": true
+                            },
+                            {
+                                "name": "Работник",
+                                "value": "%ticket_worker_mention%",
+                                "inline": false
+                            }
+                        ]
+                    }
+                ],
+                "accept_button": {
+                    "label": "Принять заказ",
+                    "style": "danger"
+                }
+            }
+        },
+        "buttons": {
+            "completed": {
+                "label": "Выполнено",
+                "style": "success"
+            },
+            "surcharge": {
+                "label": "Доплатить",
+                "style": "primary"
+            }
+        }
+    },
+    "goods": {
+        "channel": 1179800336660180992,
+        "comission": 5,
+        "start": {
+            "content": "Something",
+            "embeds": [
+                {
+                    "title": "Embed Title",
+                    "description": "Embed Description",
+                    "color": 16705372,
+                    "author": {
+                        "name": "Embed Author",
+                        "url": "https://disnake.dev/",
+                        "icon_url": "https://disnake.dev/assets/disnake-logo.png"
+                    },
+                    "thumbnail": {
+                        "url": "https://disnake.dev/assets/disnake-logo.png"
+                    },
+                    "fields": [
+                        {
+                            "name": "Regular Title",
+                            "value": "Regular Value",
+                            "inline": false
+                        },
+                        {
+                            "name": "Inline Title",
+                            "value": "Inline Value",
+                            "inline": false
+                        },
+                        {
+                            "name": "Inline Title",
+                            "value": "Inline Value",
+                            "inline": true
+                        },
+                        {
+                            "name": "Inline Title",
+                            "value": "Inline Value",
+                            "inline": true
+                        }
+                    ],
+                    "image": {
+                        "url": "https://disnake.dev/assets/disnake-banner-thin.png"
+                    },
+                    "footer": {
+                        "text": "Embed Footer",
+                        "icon_url": "https://disnake.dev/assets/disnake-logo.png"
+                    }
+                }
+            ]
+        },
+        "button": {
+            "label": "Купить",
+            "style": "success"
+        },
+        "list": {
+            "pink_dick": {
+                "name": "Резиновый самотык",
+                "cost": 5,
+                "embed": {
+                    "title": "%good_name%",
+                    "description": "работает 100%",
+                    "color": 11665663,
+                    "fields": [
+                        {
+                            "name": "Цена",
+                            "value": "`%good_cost% ₽`",
+                            "inline": false
+                        }
+                    ]
+                },
+                "ticket_embed": {
+                    "title": "%good_name%",
+                    "description": "работает 100%",
+                    "color": 11665663,
+                    "fields": [
+                        {
+                            "name": "Цена",
+                            "value": "`%good_cost% ₽`",
+                            "inline": false
+                        }
+                    ]
+                },
+                "button": {
+                    "label": "Купить",
+                    "style": "success"
+                },
+                "buy_data_embed": {
+                    "description": "Данные заказа",
+                    "color": 11665663,
+                    "fields": [
+                        {
+                            "name": "Фамилия Имя Отчество",
+                            "value": "`%field:fio_ur%`",
+                            "inline": false
+                        }
+                    ]
+                },
+                "modal": {
+                    "title": "Скромная анкета",
+                    "components": [
+                        {
+                            "label": "Ваше ФИО",
+                            "custom_id": "fio_ur",
+                            "style": "short",
+                            "placeholder": "Иваныч",
+                            "required": true
+                        },
+                        {
+                            "label": "ФИО вашей матери",
+                            "custom_id": "fio_mom",
+                            "style": "paragraph",
+                            "placeholder": "Георгий",
+                            "required": false
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
