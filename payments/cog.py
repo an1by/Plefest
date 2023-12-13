@@ -3,7 +3,8 @@ import disnake
 from disnake.ext import commands
 
 # Async and Copy
-import asyncio, nest_asyncio
+import payments.utils.timeout as timeout
+import asyncio, nest_asyncio, multiprocessing
 nest_asyncio.apply()
 from copy import deepcopy
 
@@ -166,6 +167,10 @@ class Account(commands.Cog):
     # Global Listeners
     @commands.Cog.listener()
     async def on_ready(self):
+        await self.global_initialization()
+        
+    @commands.Cog.listener
+    async def on_resumed(self):
         await self.global_initialization()
     
     @commands.Cog.listener()
@@ -382,27 +387,47 @@ class Account(commands.Cog):
     async def topup(self, inter: disnake.ApplicationCommandInteraction):
         await inter.response.send_modal(TopupModal(config, yoomoney))
     
+    async def notify_with_changed_balance(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User, account, old_balance):
+         # NOTIFY #
+        bc_reason = f"Установлен баланс администратором <@{str(inter.user.id)}>"
+        if inter.user.global_name:
+            bc_reason += f" (`{inter.user.global_name}`)"
+        await self.balance_change_notify(user, account, user, old_balance, bc_reason)
+        await self.balance_change_notify(user, account, self.admin_channel, old_balance, bc_reason)
+        # ===== #
+    
     @account.sub_command(description="Установить баланс аккаунта пользователя")
     @commands.has_role(config.data["permissions"]["admin"])
     async def balance(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User = commands.Param(description="Пользователь"), amount: float = commands.Param(description="Сумма в рублях")):
-        await inter.response.defer(ephemeral=True)
+        await inter.response.defer(ephemeral=False)
         
         account = await database.get_user(user.id)
         old_balance = account.balance
         account.balance = amount
         await database.save_user(account)
         
-        # NOTIFY #
-        bc_reason = f"Установлен баланс администратором <@{str(inter.user.id)}> (`{inter.user.global_name}`)"
-        await self.balance_change_notify(user, account, user, old_balance, bc_reason)
-        await self.balance_change_notify(user, account, self.admin_channel, old_balance, bc_reason)
-        # ===== #
-        
-        await placeholders.return_message(config.data["commands"]["account"]["balance"], inter, inter.user, account)
+        try:
+            with timeout.time_limit(5):
+                await self.notify_with_changed_balance(inter, user, account, old_balance)
+        except:
+            pass
+            
+        await placeholders.return_message(config.data["commands"]["account"]["balance"], inter, user=inter.user, account=account)
+    @balance.error
+    async def balanceError(self, inter, error):
+        await inter.edit_original_response(content="Unknown")
+        return
     
     @account.sub_command(description="Подсказка к боту")
     async def help(self, inter: disnake.ApplicationCommandInteraction):
         await self.help_message(inter)
+    
+    def permission_name(self, member: disnake.Member):
+        if equalsPermissions(member, "admin"):
+            return "Администратор"
+        if equalsPermissions(member, "worker"):
+            return "Рабочий"
+        return "Пользователь"
     
     @account.sub_command(description="Узнать информацию об аккаунте")
     async def info(self, inter: disnake.ApplicationCommandInteraction, user: disnake.User = commands.Param(description="Пользователь", default=None)):
@@ -417,14 +442,14 @@ class Account(commands.Cog):
         if (user != None) and (user != target_user):
             if ("permission_other" in obj):
                 if not equalsPermissions(inter.user, obj["permission_other"]):
-                    await placeholders.return_message(config.data["other_messages"]["no_permission"], inter, inter.user, account)
+                    await placeholders.return_message(config.data["other_messages"]["no_permission"], inter, inter.user, account, {"%account_permission_name%": self.permission_name(inter.user)})
                     return
             target_user = user
             target_account = await database.get_user(user.id)
         else:
             target_user = inter.user
             target_account = account
-        await placeholders.return_message(obj, inter=inter, user=target_user, account=target_account)
+        await placeholders.return_message(obj, inter=inter, user=target_user, account=target_account, additional_placeholders={"%account_permission_name%": self.permission_name(target_user)})
     
     @account.sub_command(description="Вывести деньги с баланса аккаунта на счет YooMoney")
     @commands.has_role(config.data["permissions"]["worker"])

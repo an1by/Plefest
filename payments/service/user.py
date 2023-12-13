@@ -1,38 +1,26 @@
 class PlefestUser:
-    def __init__(self, discord: str, permission: str, balance: int) -> None:
+    def __init__(self, discord: str, balance: int) -> None:
         self.discord = discord
-        self.permission = permission
         self.balance = balance
-    
-    def permission_name(self):
-        permission_name = "Пользователь"
-        match (self.permission):
-            case "worker":
-                permission_name = "Рабочий"
-            case "admin":
-                permission_name = "Администратор"
-        return permission_name
     
     def get_placeholders(self, prefix: str = "account"):
         return {
             f"%{prefix}_discord%": self.discord,
-            f"%{prefix}_permission%": self.permission,
-            f"%{prefix}_permission_name%": self.permission_name(),
             f"%{prefix}_balance%": (int(self.balance * 100) / 100)
         }
 
 user_list = []
 
-def construct_user(discord: str, permission: str, balance: int) -> PlefestUser:
+def construct_user(discord: str, balance: int) -> PlefestUser:
     global user_list
-    user = PlefestUser(discord, permission, balance)
+    user = PlefestUser(discord, balance)
     user_list.append(user)
     return user
 
 def construct_user_from_database(data: tuple) -> PlefestUser:
     global user_list
-    _id, discord, permission, balance = data
-    user = PlefestUser(discord, permission, balance)
+    _id, discord, balance = data
+    user = PlefestUser(discord, balance)
     user_list.append(user)
     return user
 

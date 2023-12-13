@@ -11,4 +11,4 @@ async def on_ready():
     print("Бот готов!")
 
 bot.load_extension("payments.cog")
-bot.run("MTEyMDM1NTcwMzc2NTM1MjUzOQ.G9-2Up.6ND6hcR3tCLX2fK6xKZpciPnCnkeJUYHF65mX0")
+bot.run("MTEyMDM1NTcwMzc2NTM1MjUzOQ.GTeP87.KiK9cojk9ku5c2n-MeHUHSTq7GnIQO83PraAVo")

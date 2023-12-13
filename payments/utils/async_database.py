@@ -41,7 +41,7 @@ class Database:
         category_id = config.data["tickets"]["category"]
         category = disnake.utils.get(guild.categories, id=category_id)
 
-        title = f"{user.global_name}-{good.name}-{str(get_seconds())[3:]}"
+        title = f"{good.name}-{str(get_seconds())[3:]}"
         channel = await guild.create_text_channel(title, category=category, overwrites={
             guild.default_role: disnake.PermissionOverwrite(view_channel=False)
         })
@@ -171,7 +171,7 @@ class Database:
         # await cursor.close()
         
         # if result == None:
-        create_users = f"CREATE TABLE IF NOT EXISTS `{table_name}` (`id` INT NOT NULL AUTO_INCREMENT, `discord` TEXT NOT NULL, `permission` TEXT NOT NULL DEFAULT ('default'), `balance` INT NOT NULL DEFAULT 0, PRIMARY KEY (`id`));"
+        create_users = f"CREATE TABLE IF NOT EXISTS `{table_name}` (`id` INT NOT NULL AUTO_INCREMENT, `discord` TEXT NOT NULL, `balance` INT NOT NULL DEFAULT 0, PRIMARY KEY (`id`));"
         create_tickets = f"CREATE TABLE IF NOT EXISTS `{tickets_table_name}` (`id` INT NOT NULL AUTO_INCREMENT, `channel_id` TEXT NOT NULL, `buyer` TEXT NOT NULL, `good` TEXT NOT NULL, `balance` INT NOT NULL DEFAULT 0, `worker` TEXT DEFAULT NULL, `active` BOOLEAN NOT NULL DEFAULT 1, PRIMARY KEY (`id`));"
         cursor = await self.connection.cursor()
         await cursor.execute(create_users)
@@ -224,7 +224,7 @@ class Database:
         await cursor.close()
         
         cursor = await self.connection.cursor()
-        query = f"INSERT INTO {table_name} (discord, permission, balance) VALUES ('{user.discord}', '{user.permission}', {user.balance});" if isEmpty(result) else f"UPDATE {table_name} SET balance = {user.balance}, permission = '{user.permission}' WHERE discord = '{user.discord}';"
+        query = f"INSERT INTO {table_name} (discord, balance) VALUES ('{user.discord}', {user.balance});" if isEmpty(result) else f"UPDATE {table_name} SET balance = {user.balance} WHERE discord = '{user.discord}';"
         await cursor.execute(query)
         await cursor.close()
         
@@ -247,7 +247,7 @@ class Database:
         
         if not isEmpty(result):
             return construct_user_from_database(result)
-        return construct_user(discord,  "default", 0)
+        return construct_user(discord, 0)
     
     def disconnect(self):
         self.connection.close()
